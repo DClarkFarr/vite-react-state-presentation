@@ -1,6 +1,7 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
+const cors = require("cors");
 
 const session = require("express-session");
 const sessionStore = require("express-session-rsdb");
@@ -9,6 +10,14 @@ const taskRouter = require("./routes/taskRoutes");
 
 const app = express();
 const port = 4000;
+
+var corsOptionsDelegate = function (req, callback) {
+  var corsOptions;
+  corsOptions = { origin: true, credentials: true };
+  callback(null, corsOptions); // callback expects two parameters: error and options
+};
+
+app.use(cors(corsOptionsDelegate));
 
 app.use(
   session({
