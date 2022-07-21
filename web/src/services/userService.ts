@@ -1,11 +1,16 @@
-import { Task } from "../types/TaskTypes";
+import { User } from "../types/UserTypes";
 import axiosClient from "./axiosClient";
 
 class UserService {
   static async getUser() {
     return axiosClient
-      .get<{ tasks: Task[] }>("/tasks")
-      .then(({ data: { tasks } }) => tasks);
+      .get<{ user: User }>("/user")
+      .then(({ data: { user } }) => user);
+  }
+  static async setUser(name: string){
+    return axiosClient
+      .post<{ user: User }>("/user", { name })
+      .then(({ data: { user } }) => user);
   }
 }
 

@@ -4,13 +4,10 @@ import Home from "./pages/Home";
 import Tasks from "./pages/Tasks";
 import Profile from "./pages/Profile";
 import MainLayout from "./components/Layout/MainLayout";
-import { createTasksStore, TasksContext } from "./stores/contextTasksStore";
 
 function App() {
-  const taskStore = createTasksStore();
 
   return (
-    <TasksContext.Provider value={taskStore}>
       <div className="app">
         <Routes>
           <Route path="/" element={<MainLayout />}>
@@ -20,7 +17,6 @@ function App() {
           </Route>
         </Routes>
       </div>
-    </TasksContext.Provider>
   );
 }
 
