@@ -7,6 +7,7 @@ const session = require("express-session");
 const sessionStore = require("express-session-rsdb");
 
 const taskRouter = require("./routes/taskRoutes");
+const userRouter = require("./routes/userRoutes");
 
 const app = express();
 const port = 4000;
@@ -38,6 +39,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
 
 app.use("/api/tasks", taskRouter);
+app.use("/api/user", userRouter);
 
 app.get("/", (req, res) => {
   res.send("Hello World!");

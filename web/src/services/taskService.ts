@@ -7,12 +7,12 @@ class TaskService {
       .get<{ tasks: Task[] }>("/tasks")
       .then(({ data: { tasks } }) => tasks);
   }
-  static async create(data: { name: string }) {
+  static async create(data: { title: string }) {
     return axiosClient
       .post<{ task: Task }>("/tasks", data)
       .then(({ data: { task } }) => task);
   }
-  static async update(id: number, data: { name: string }) {
+  static async update(id: number, data: { title: string }) {
     return axiosClient
       .put<{ task: Task }>(`/tasks/${id}`, data)
       .then(({ data: { task } }) => task);

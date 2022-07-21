@@ -1,7 +1,7 @@
 const express = require("express");
 const userRouter = express.Router();
 
-let userIdInc = 0;
+let userIdInc = 1;
 
 userRouter.get("/", (req, res) => {
   if(!req.session.users) {
@@ -16,3 +16,6 @@ userRouter.post('/', (req, res) => {
   
   res.json({user: req.session.user});
 })
+
+
+module.exports = userRouter;
