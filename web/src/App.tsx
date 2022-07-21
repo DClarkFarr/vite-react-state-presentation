@@ -1,15 +1,23 @@
 import { useEffect } from "react";
 import "./App.scss";
-import TaskService from "./services/taskService";
+import { Routes, Route } from "react-router-dom";
+import Home from "./pages/Home";
+import Tasks from "./pages/Tasks";
+import Profile from "./pages/Profile";
+import MainLayout from "./components/Layout/MainLayout";
 
 function App() {
-  useEffect(() => {
-    TaskService.list().then((tasks) => {
-      console.log("got ttasks", tasks);
-    });
-    console.log("app mounted");
-  }, []);
-  return <div className="app">app text here</div>;
+  return (
+    <div className="app">
+      <Routes>
+        <Route path="/" element={<MainLayout />}>
+          <Route path="tasks" element={<Tasks />} />
+          <Route path="profile" element={<Profile />} />
+          <Route path="/" element={<Home />} />
+        </Route>
+      </Routes>
+    </div>
+  );
 }
 
 export default App;
