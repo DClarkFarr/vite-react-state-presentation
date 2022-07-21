@@ -5,7 +5,6 @@ const taskRouter = express.Router();
 taskRouter.get("/", (req, res) => {
   if (!req.session.tasks) {
     req.session.tasks = [{ id: 1, name: "Task 1" }];
-    req.session.save();
   }
   const tasks = req.session.tasks;
   res.json({ tasks });
