@@ -25,6 +25,10 @@ const MainLayout = () => {
             <span className="badge">0</span>
           </span>
         </CustomLink>
+
+        <div className="header__right">
+          Welcome, <span className="badge">User?</span>
+        </div>
       </div>
       <div className="main">
         <Outlet />
