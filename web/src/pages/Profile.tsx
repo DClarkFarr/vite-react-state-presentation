@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import UserForm, { UserFormState } from "../components/Forms/UserForm";
 import MainLayout from "../components/Layout/MainLayout";
 import TaskGrid from "../components/Task/TaskGrid";
+import useRenderCounter from "../hooks/useRenderCounter";
 import TaskService from "../services/taskService";
 import UserService from "../services/userService";
 import { Task } from "../types/TaskTypes";
@@ -11,6 +12,8 @@ const Profile = () => {
   const [user, setUser] = useState<User | null>(null);
 
   const [tasks, setTasks] = useState<Task[]>([]);
+
+  const { count } = useRenderCounter('profile');
 
   /**
    * NOTE 3 
