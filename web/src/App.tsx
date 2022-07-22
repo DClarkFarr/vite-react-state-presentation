@@ -3,7 +3,6 @@ import { Routes, Route } from "react-router-dom";
 import Home from "./pages/Home";
 import Tasks from "./pages/Tasks";
 import Profile from "./pages/Profile";
-import MainLayout from "./components/Layout/MainLayout";
 
 function App() {
 
