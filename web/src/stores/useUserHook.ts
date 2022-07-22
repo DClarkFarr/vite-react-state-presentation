@@ -25,7 +25,6 @@ const useUserHook = () => {
     try {
       const user = await UserService.getUser();
       setUser(user);
-      console.log('setting user from query')
     }catch(err){
       console.warn('error getting user', err);
     }
@@ -38,12 +37,12 @@ const useUserHook = () => {
     /**
      * STEP 1
      */
-    // getUser();
+    getUser();
 
     /**
      * STEP 2
      */
-    refreshUser();
+    // refreshUser();
     
   }, []);
 

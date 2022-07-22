@@ -39,16 +39,31 @@ const useTasksHook = (options: Partial<{completed: boolean, userId: number}> = {
   }
 
   const getTasks = async () => {
+    /**
+     * NOTE 3
+     * Reducer discussion HERE AND NOW!
+     * With react 18, set state calls are grouped, to avoid unnecessary re-renders,
+     * making useReducer hateful in every single way
+     * 
+     * 
+     * STEP 3.A
+     * PROVE IT:  Uncomment the logs, and compare with profile render counter.
+     */
     setIsLoading(true);
+    //  console.log('getTasks => setIsLoading(true)');
     try {
-      await TaskService.list(options).then(setTasks);
+      const tasks = await TaskService.list(options)
+      setTasks(tasks);
+      //  console.log('getTasks => setTasks(tasks)');
     }catch(err){
       console.warn('error refreshing tasks', err);
     }
     setIsLoading(false);
+    //  console.log('getTasks => setIsLoading(false)');
     
     if(!hasLoaded) {
       setHasLoaded(true);
+      //  console.log('getTasks => setHasLoaded(true)');
     }
   }
 
