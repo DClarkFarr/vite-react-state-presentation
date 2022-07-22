@@ -1,64 +1,46 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import TaskForm, { TaskFormState } from "../components/Forms/TaskForm";
 import MainLayout from "../components/Layout/MainLayout";
 import TaskGrid from "../components/Task/TaskGrid";
-import TaskService from "../services/taskService";
-import { Task } from "../types/TaskTypes";
+import { useTasksStore } from "../stores/contextTasksStore";
 
 const Tasks = () => {
-  const [selectedTaskId, setSelectedTaskId] = useState<number | null>(null);
-  const [tasks, setTasks] = useState<Task[]>([]);
+  const {
+    tasks,
+    createTask,
+    updateTask,
+    isLoading
+  } = useTasksStore();
 
-  /**
-   * NOTE 1 
-   * Local state management.
-   * If I want a task list somewhere else, I would either have to:
-   *   A: Duplicate logic
-   *   B: Abstract this into a hook, but will have to prop drill everything
-   */
-  const onCreateTask = async (values: TaskFormState) => {
+  const [selectedTaskId, setSelectedTaskId] = useState<number | null>(null);
+
+  const onSubmitTask = async (values: TaskFormState) => {
     if(selectedTaskId) {
-      const task = await TaskService.update(selectedTaskId, values);
-      const index = tasks.findIndex(t => t.id === task.id);
-      const ts = [...tasks];
-      ts.splice(index, 1, task);
-      setTasks(ts);
+      await updateTask(selectedTaskId, values);
     }else{
-      const task = await TaskService.create(values);
-      setTasks([...tasks, task]);
+      await createTask(values);
     }
 
     setSelectedTaskId(null);
   }
 
-
-  /**
-   * NOTE 2.A 
-   * Have to prop drill this every time a prop grid is used
-   */
   const onToggleTaskComplete = async (id: number, completed: boolean) => {
-    const index = tasks.findIndex(task => task.id === id);
-    const ts = [...tasks];
-
-    ts.splice(index, 1, { ...ts[index], completed });
-    setTasks(ts);
-
-    TaskService.update(id, { completed });
+    await updateTask(id, { completed });
   }
 
-  useEffect(() => {
-    TaskService.list().then(setTasks);
-  }, []);
 
   return (
     <MainLayout>
       <div className="tasks">
         <h1>Tasks</h1>
 
-        <TaskForm onSubmit={onCreateTask} />
+        <TaskForm onSubmit={onSubmitTask} />
         <br />
         <br />
-        <TaskGrid tasks={tasks} onToggleComplete={onToggleTaskComplete} />
+        {isLoading && <div>Loading...</div>}
+        {!isLoading && ( 
+          <TaskGrid tasks={tasks} onToggleComplete={onToggleTaskComplete} />
+        )}
       </div>
     </MainLayout>
   )

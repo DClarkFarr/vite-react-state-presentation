@@ -3,10 +3,6 @@ import { Outlet } from "react-router-dom";
 import CustomLink from "./NavLink";
 
 const MainLayout = ({children = null}: {children?: ReactNode}) => {
-  /**
-   * NOTE 4, 5
-   * How do we get task totals into the nav?
-   */
   return (
     <>
       <div className="header">
