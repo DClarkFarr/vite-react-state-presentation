@@ -2,48 +2,40 @@ import { useEffect, useState } from "react";
 import UserForm, { UserFormState } from "../components/Forms/UserForm";
 import MainLayout from "../components/Layout/MainLayout";
 import TaskGrid from "../components/Task/TaskGrid";
-import TaskService from "../services/taskService";
 import UserService from "../services/userService";
-import { Task } from "../types/TaskTypes";
+import useTasksHook from "../stores/useTasksHook";
 import { User } from "../types/UserTypes";
 
 const Profile = () => {
   const [user, setUser] = useState<User | null>(null);
 
-  const [tasks, setTasks] = useState<Task[]>([]);
-
   /**
-   * NOTE 3 
-   * Local only.  How do we get this into the nav?
+   * NOTE 2 
+   * You cannot conditionally render hooks.
+   * This hook will always fire twice. Once when user is empty, and again when user has loaded.
+   * This produces the "flicker" where we see all tasks load, and then some disappear.
    */
+  const {
+    tasks, 
+    isLoading,
+    updateTask
+  } = useTasksHook({ userId: user?.id });
+
   const handleSubmit = async (values: UserFormState) => {
     const user = await UserService.setUser(values.name);
     setUser(user);
   }
 
-  /**
-   * NOTE 2.B 
-   * Have to prop drill this every time a prop grid is used
-   */
   const onToggleTaskComplete = async (id: number, completed: boolean) => {
-    const index = tasks.findIndex(task => task.id === id);
-    const ts = [...tasks];
-
-    ts.splice(index, 1, { ...ts[index], completed });
-    setTasks(ts);
-
-    TaskService.update(id, { completed });
+    updateTask(id, { completed });
   }
 
   useEffect(() => {
     UserService.getUser().then(setUser);
   }, [])
 
-  useEffect(() => {
-    if(user){
-      TaskService.list({ userId: user?.id }).then(setTasks);
-    }
-  }, [user])
+
+
 
   return (
     <MainLayout>
@@ -55,8 +47,10 @@ const Profile = () => {
         
         <UserForm onSubmit={handleSubmit} user={user || undefined} key={user?.name} />
         <br /><br />
-        {user && <h3>My Tasks</h3>}
-        <TaskGrid tasks={tasks} onToggleComplete={onToggleTaskComplete} />
+        {user && !isLoading && <>
+          <h3>My Tasks</h3>
+          <TaskGrid tasks={tasks} onToggleComplete={onToggleTaskComplete} />
+        </>}
       </div>
     </MainLayout>
   )
