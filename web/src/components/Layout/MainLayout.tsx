@@ -7,8 +7,20 @@ const MainLayout = () => {
     <>
       <div className="header">
         <CustomLink to="/">Home</CustomLink>
-        <CustomLink to="/tasks">Tasks</CustomLink>
-        <CustomLink to="/profile">Profile</CustomLink>
+        <CustomLink to="/tasks">
+          <span>
+            Tasks
+          </span> 
+          <span>
+            <span className="badge">0</span>
+          </span>
+        </CustomLink>
+        <CustomLink to="/profile">
+          <span>Profile</span>
+          <span>
+            <span className="badge">0</span>
+          </span>
+        </CustomLink>
       </div>
       <div className="main">
         <Outlet />
