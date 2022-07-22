@@ -1,6 +1,7 @@
 import UserForm, { UserFormState } from "../components/Forms/UserForm";
 import MainLayout from "../components/Layout/MainLayout";
 import TaskGrid from "../components/Task/TaskGrid";
+import useRenderCounter from "../hooks/useRenderCounter";
 import useTasksHook from "../stores/useTasksHook";
 import useUserHook from "../stores/useUserHook";
 
@@ -8,8 +9,15 @@ const Profile = () => {
 
   const { user, updateUser } = useUserHook();
 
+  const { count } = useRenderCounter('profile');
+
   /**
-   * NOTE 2 
+   * STEP 3.B
+   */
+  // console.log('rendered count', count)
+
+  /**
+   * NOTE 4
    * You cannot conditionally render hooks.
    * This hook will always fire twice. Once when user is empty, and again when user has loaded.
    * This produces the "flicker" where we see all tasks load, and then some disappear.
