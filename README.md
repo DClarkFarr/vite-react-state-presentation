@@ -9,7 +9,13 @@
 
 ## 2--create-context
 
-Next steps - hook up functionality
+Global state pros 
+- we can get totals / state into header 
+- more efficient with re-queries / re-renders
+
+Global state cons
+- Subset lists (user tasks) require a lot of additional work. General task methods cannot be reused.
+- if other users are adding tasks, we'll need to build in "refetch timeout" functionality
 
 ## 3--immer/zustand
 

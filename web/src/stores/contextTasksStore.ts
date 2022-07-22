@@ -7,19 +7,20 @@ import { debounce } from "lodash";
  * STEP 1.A
  * Maybe we don't need to maintain this?
  */
-// export type TasksStore = {
-//   tasks: Task[];
-//   isLoading: boolean;
-//   isCreating: boolean;
-//   isUpdating: boolean;
-//   isDeleting: boolean;
-//   createTask: (data: { title: string }) => Promise<Task>;
-//   updateTask: (id: number, data: TaskPostData) => Promise<Task>;
-//   deleteTask: (id: number) => Promise<void>;
-//   refreshTasks: (options?: TaskListOptions) => Promise<void>;
-// };
+export type TasksStore = {
+  tasks: Task[];
+  isLoading: boolean;
+  isCreating: boolean;
+  isUpdating: boolean;
+  isDeleting: boolean;
+  createTask: (data: { title: string }) => Promise<Task>;
+  updateTask: (id: number, data: TaskPostData) => Promise<Task>;
+  deleteTask: (id: number) => Promise<void>;
+  refreshTasks: (options?: TaskListOptions) => Promise<void>;
+  getFilteredTasks: (options: TaskListOptions) => Task[]
+};
 
-export const createTasksStore = () => {
+export const createTasksStore = (): TasksStore => {
   const [tasks, setTasks] = useState<Task[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [isCreating, setIsCreating] = useState(false);
@@ -65,15 +66,28 @@ export const createTasksStore = () => {
       .finally(() => setIsLoading(false));
   };
 
+  const getFilteredTasks = (options: TaskListOptions) => {
+    return tasks.filter((f) => {
+      let matched = true;
+      if (typeof options.completed === 'boolean') {
+        matched = f.completed === options.completed;
+      }
+      if (typeof options.userId === 'number') {
+        matched = matched && f.user.id === options.userId;
+      }
+      return matched;
+    })
+  }
+
   const refreshTasks = debounce(async (options?: TaskListOptions) => {
     if (!isLoading) {
       await getTasks(options);
     }
     /**
      * STEP 1.B
-     * Maybe we don't need as TaskStore['refreshTasks']?
+     * Maybe we don't need as TasksStore['refreshTasks']?
      */
-  }, 100) /* as TaskStore['refreshTasks'] */;
+  }, 100) as TasksStore['refreshTasks'];
 
   useEffect(() => {
     console.log("mounted context tasks store");
@@ -82,8 +96,8 @@ export const createTasksStore = () => {
      * What, this doesn't work?!?!
      */
     if (!isLoading) {
-      // getTasks();
-      refreshTasks();
+      getTasks();
+      // refreshTasks();
     }
   }, []);
 
@@ -97,6 +111,7 @@ export const createTasksStore = () => {
     updateTask,
     deleteTask,
     refreshTasks,
+    getFilteredTasks,
   };
 };
 
@@ -104,7 +119,7 @@ export const createTasksStore = () => {
  * STEP 1.C
  * Now we're dynamic
  */
-type TasksStore = ReturnType<typeof createTasksStore>
+// type TasksStore = ReturnType<typeof createTasksStore>
 
 export const TasksContext = React.createContext<TasksStore>({} as TasksStore);
 

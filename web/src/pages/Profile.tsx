@@ -1,44 +1,60 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import UserForm, { UserFormState } from "../components/Forms/UserForm";
 import MainLayout from "../components/Layout/MainLayout";
 import TaskGrid from "../components/Task/TaskGrid";
 import useRenderCounter from "../hooks/useRenderCounter";
 import TaskService from "../services/taskService";
 import UserService from "../services/userService";
+import { useTasksStore } from "../stores/contextTasksStore";
+import { useUserStore } from "../stores/contextUserStore";
 import { Task } from "../types/TaskTypes";
 import { User } from "../types/UserTypes";
 
 const Profile = () => {
-  const [user, setUser] = useState<User | null>(null);
+  
 
-  const [tasks, setTasks] = useState<Task[]>([]);
+  const {
+    user,
+    isLoading: isLoadingUser,
+    updateUser,
+  } = useUserStore();
+
+  const {
+    tasks: allTasks,
+    isLoading: isLoadingTasks,
+    updateTask,
+    getFilteredTasks,
+  } = useTasksStore();
+
+  /**
+   * NOTE 1
+   * Oh no! User-specific tasks?  
+   * Now we have problems:
+   * - If we refresh only users's tasks, then we'll erase the "all tasks" list, which will mess up
+   *   the nav bar, and require refetching on every page load 
+   * - We could add a user.tasks[] object, but then when updating there, we would have to maintain dual task lists 
+   *   between tasks store and use store.
+   * 
+   * Hacky fix
+   * - We added a hack method getFilteredTasks(), but that isn't scalable.
+   * - Does allow us to re-use task update/create methods
+   * 
+   */
+  const userTasks = useMemo(() => {
+    return getFilteredTasks({userId: user?.id});
+  }, [allTasks, user?.id])
 
   const { count } = useRenderCounter('profile');
 
   const handleSubmit = async (values: UserFormState) => {
-    const user = await UserService.setUser(values.name);
-    setUser(user);
+    return updateUser(values);
   }
 
   const onToggleTaskComplete = async (id: number, completed: boolean) => {
-    const index = tasks.findIndex(task => task.id === id);
-    const ts = [...tasks];
-
-    ts.splice(index, 1, { ...ts[index], completed });
-    setTasks(ts);
-
-    TaskService.update(id, { completed });
+    updateTask(id, { completed });
   }
 
-  useEffect(() => {
-    UserService.getUser().then(setUser);
-  }, [])
-
-  useEffect(() => {
-    if(user){
-      TaskService.list({ userId: user?.id }).then(setTasks);
-    }
-  }, [user])
+  
 
   return (
     <MainLayout>
@@ -50,8 +66,13 @@ const Profile = () => {
         
         <UserForm onSubmit={handleSubmit} user={user || undefined} key={user?.name} />
         <br /><br />
-        {user && <h3>My Tasks</h3>}
-        <TaskGrid tasks={tasks} onToggleComplete={onToggleTaskComplete} />
+        {isLoadingTasks && <div>Loading...</div>}
+        {!isLoadingTasks && (
+          <>
+            <h3>My Tasks</h3>
+            <TaskGrid tasks={userTasks} onToggleComplete={onToggleTaskComplete} />
+          </>
+        )}
       </div>
     </MainLayout>
   )
