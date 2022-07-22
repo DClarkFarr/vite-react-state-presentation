@@ -2,7 +2,7 @@ import { ReactNode } from "react";
 import { Outlet } from "react-router-dom";
 import CustomLink from "./NavLink";
 
-const MainLayout = () => {
+const MainLayout = ({children = null}: {children?: ReactNode}) => {
   /**
    * NOTE 4, 5
    * How do we get task totals into the nav?
@@ -31,7 +31,7 @@ const MainLayout = () => {
         </div>
       </div>
       <div className="main">
-        <Outlet />
+        {children}
       </div>
       <div className="footer">
         &copy; 2022 - DCF Coders - All rights reserved

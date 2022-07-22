@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import UserForm, { UserFormState } from "../components/Forms/UserForm";
+import MainLayout from "../components/Layout/MainLayout";
 import TaskGrid from "../components/Task/TaskGrid";
 import TaskService from "../services/taskService";
 import UserService from "../services/userService";
@@ -44,17 +45,21 @@ const Profile = () => {
     }
   }, [user])
 
-  return <div className="profile">
-    <h1>
-      Profile
-    </h1>
-    <br />
-    
-    <UserForm onSubmit={handleSubmit} user={user || undefined} key={user?.name} />
-    <br /><br />
-    {user && <h3>My Tasks</h3>}
-    <TaskGrid tasks={tasks} onToggleComplete={onToggleTaskComplete} />
-  </div>;
+  return (
+    <MainLayout>
+      <div className="profile">
+        <h1>
+          Profile
+        </h1>
+        <br />
+        
+        <UserForm onSubmit={handleSubmit} user={user || undefined} key={user?.name} />
+        <br /><br />
+        {user && <h3>My Tasks</h3>}
+        <TaskGrid tasks={tasks} onToggleComplete={onToggleTaskComplete} />
+      </div>
+    </MainLayout>
+  )
 };
 
 export default Profile;

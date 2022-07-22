@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import TaskForm, { TaskFormState } from "../components/Forms/TaskForm";
+import MainLayout from "../components/Layout/MainLayout";
 import TaskGrid from "../components/Task/TaskGrid";
 import TaskService from "../services/taskService";
 import { Task } from "../types/TaskTypes";
@@ -49,14 +50,18 @@ const Tasks = () => {
     TaskService.list().then(setTasks);
   }, []);
 
-  return <div className="tasks">
-    <h1>Tasks</h1>
+  return (
+    <MainLayout>
+      <div className="tasks">
+        <h1>Tasks</h1>
 
-    <TaskForm onSubmit={onCreateTask} />
-    <br />
-    <br />
-    <TaskGrid tasks={tasks} onToggleComplete={onToggleTaskComplete} />
-  </div>;
+        <TaskForm onSubmit={onCreateTask} />
+        <br />
+        <br />
+        <TaskGrid tasks={tasks} onToggleComplete={onToggleTaskComplete} />
+      </div>
+    </MainLayout>
+  )
 };
 
 export default Tasks;
