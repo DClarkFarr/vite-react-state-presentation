@@ -1,13 +1,12 @@
-import { useEffect, useState } from "react";
 import UserForm, { UserFormState } from "../components/Forms/UserForm";
 import MainLayout from "../components/Layout/MainLayout";
 import TaskGrid from "../components/Task/TaskGrid";
-import UserService from "../services/userService";
 import useTasksHook from "../stores/useTasksHook";
-import { User } from "../types/UserTypes";
+import useUserHook from "../stores/useUserHook";
 
 const Profile = () => {
-  const [user, setUser] = useState<User | null>(null);
+
+  const { user, updateUser } = useUserHook();
 
   /**
    * NOTE 2 
@@ -22,20 +21,12 @@ const Profile = () => {
   } = useTasksHook({ userId: user?.id });
 
   const handleSubmit = async (values: UserFormState) => {
-    const user = await UserService.setUser(values.name);
-    setUser(user);
+    updateUser(values);
   }
 
   const onToggleTaskComplete = async (id: number, completed: boolean) => {
     updateTask(id, { completed });
   }
-
-  useEffect(() => {
-    UserService.getUser().then(setUser);
-  }, [])
-
-
-
 
   return (
     <MainLayout>

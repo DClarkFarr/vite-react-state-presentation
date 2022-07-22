@@ -38,10 +38,7 @@ const useTasksHook = (options: Partial<{completed: boolean, userId: number}> = {
     setIsUpdating(false);
   }
 
-  /**
-   * STEP 1
-   */
-  const refreshTasks = async () => {
+  const getTasks = async () => {
     setIsLoading(true);
     try {
       await TaskService.list(options).then(setTasks);
@@ -55,22 +52,9 @@ const useTasksHook = (options: Partial<{completed: boolean, userId: number}> = {
     }
   }
 
-  /** 
-   * STEP 2
-   */
-  // const refreshTasks = debounce(async () => {
-  //   setIsLoading(true);
-  //   try {
-  //     await TaskService.list(options).then(setTasks);
-  //   }catch(err){
-  //     console.warn('error refreshing tasks', err);
-  //   }
-  //   setIsLoading(false);
-    
-  //   if(!hasLoaded) {
-  //     setHasLoaded(true);
-  //   }
-  // }, 100);
+  const refreshTasks = debounce(async () => {
+    return getTasks();
+  }, 100);
 
   /**
    * Single query on init
@@ -93,8 +77,16 @@ const useTasksHook = (options: Partial<{completed: boolean, userId: number}> = {
      * NOTE 2
      * Do we get duplicate queries?
      */
-    console.log('options changed, when', hasLoaded)
-    refreshTasks();
+
+    /**
+     * STEP 1
+     */
+    getTasks();
+
+    /**
+     * STEP 2
+     */
+    // refreshTasks();
 
     // Must serialize options, because obj === obj will fail as it's technically a different object
   }, [JSON.stringify(options)]);
