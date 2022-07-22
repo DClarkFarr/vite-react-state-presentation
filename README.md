@@ -17,7 +17,7 @@ Global state cons
 - Subset lists (user tasks) require a lot of additional work. General task methods cannot be reused.
 - if other users are adding tasks, we'll need to build in "refetch timeout" functionality
 
-## 3--immer/zustand
+## 3--zustand
 
 Next steps - hook up functionality
 
