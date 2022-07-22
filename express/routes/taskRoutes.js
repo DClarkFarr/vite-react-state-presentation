@@ -5,9 +5,10 @@ const taskRouter = express.Router();
 
 taskRouter.get("/", (req, res) => {
   if (!req.session.tasks) {
+    console.log('get: no tasks found');
     req.session.tasks = [{ id: 1, title: "Task 1", completed: false, user: {id: 1, name: 'Guest'} }];
   }
-  let tasks = req.session.tasks;
+  let tasks = [...req.session.tasks];
 
   if(req.query.userId){
     tasks = tasks.filter(task => task.user.id === parseInt(req.query.userId));
@@ -20,9 +21,10 @@ taskRouter.get("/", (req, res) => {
 
 taskRouter.post("/", (req, res) => {
   if (!req.session.tasks) {
+    console.log('create: no tasks found');
     req.session.tasks = [{ id: 1, title: "Task 1", completed: false, user: {id: 1, name: 'Guest'} }];
   }
-  const tasks = req.session.tasks;
+  const tasks = [...req.session.tasks];
 
   const task = {
     id: tasks.length + 1,
@@ -39,9 +41,10 @@ taskRouter.post("/", (req, res) => {
 
 taskRouter.put("/:id", (req, res) => {
   if (!req.session.tasks) {
+    console.log('update: no tasks found');
     req.session.tasks = [{ id: 1, title: "Task 1", completed: false, user: {id: 1, name: 'Guest'} }];
   }
-  const tasks = req.session.tasks;
+  const tasks = [...req.session.tasks];
 
   const index = tasks.findIndex(task => task.id === parseInt(req.params.id));
 

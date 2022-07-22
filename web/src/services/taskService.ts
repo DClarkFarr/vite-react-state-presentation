@@ -2,7 +2,7 @@ import { Task } from "../types/TaskTypes";
 import axiosClient from "./axiosClient";
 
 class TaskService {
-  static async list(options: Partial<{completed: boolean, userId: number}>) {
+  static async list(options: Partial<{completed: boolean, userId: number}> = {}) {
     return axiosClient
       .get<{ tasks: Task[] }>("/tasks", { params: options })
       .then(({ data: { tasks } }) => tasks);

@@ -29,7 +29,7 @@ app.use(
     }),
     secret: "There is no power, but what you have in your head",
     resave: false,
-    saveUninitialized: true,
+    saveUninitialized: false,
     cookie: { secure: false, maxAge: 3600000 },
   })
 );

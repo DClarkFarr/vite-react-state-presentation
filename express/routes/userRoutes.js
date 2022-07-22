@@ -4,7 +4,7 @@ const userRouter = express.Router();
 let userIdInc = 1;
 
 userRouter.get("/", (req, res) => {
-  if(!req.session.users) {
+  if(!req.session.user) {
     req.session.user = { id: userIdInc++, name: "Guest" };
   }
 
