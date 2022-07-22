@@ -25,12 +25,12 @@ app.use(
     store: new sessionStore({
       data_storage_area: "./db",
       collection: "session",
-      purge_interval: 700,
+      //purge_interval: 700,
     }),
     secret: "There is no power, but what you have in your head",
     resave: false,
     saveUninitialized: false,
-    cookie: { secure: false, maxAge: 3600000 },
+    cookie: { secure: false, maxAge: 360000000 },
   })
 );
 
