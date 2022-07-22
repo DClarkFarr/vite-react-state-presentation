@@ -7,6 +7,11 @@
 - Duplicate task state logic on Tasks/Profile
 - spirals out of control when adding things to nav
 
+## 1--basic-hook
+- better abstraction
+- still must use debounce to reduce multiple queries
+- still cannot address navbar without crazy prop drilling or mad queries
+
 ## 2--create-context
 
 Next steps - hook up functionality
