@@ -1,15 +1,11 @@
 # vite react state presentation
 
-Master TODO
+## Master - Notes
 
-- add task counter to nav
-- create task create/update form // hook up generically to work with multiple states
-- create task delete button // hook up generically to work with multiple states
-- add "completed" task functionality
-  - filter on endpoint
-  - add to task type
-- add author
-  - save name to session
+- multiple api queries on load for tasks / user 
+- must prop drill every function from page > TasksGrid > TaskItem
+- Duplicate task state logic on Tasks/Profile
+
 
 ## 1--create-context
 

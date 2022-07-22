@@ -7,8 +7,15 @@ import { Task } from "../types/TaskTypes";
 const Tasks = () => {
   const [selectedTaskId, setSelectedTaskId] = useState<number | null>(null);
   const [tasks, setTasks] = useState<Task[]>([]);
-  
-  const onSaveTask = async (values: TaskFormState) => {
+
+  /**
+   * NOTE 1 
+   * Local state management.
+   * If I want a task list somewhere else, I would either have to:
+   *   A: Duplicate logic
+   *   B: Abstract this into a hook, but will have to prop drill everything
+   */
+  const onCreateTask = async (values: TaskFormState) => {
     if(selectedTaskId) {
       const task = await TaskService.update(selectedTaskId, values);
       const index = tasks.findIndex(t => t.id === task.id);
@@ -23,6 +30,11 @@ const Tasks = () => {
     setSelectedTaskId(null);
   }
 
+
+  /**
+   * NOTE 2.A 
+   * Have to prop drill this every time a prop grid is used
+   */
   const onToggleTaskComplete = async (id: number, completed: boolean) => {
     const index = tasks.findIndex(task => task.id === id);
     const ts = [...tasks];
@@ -40,7 +52,7 @@ const Tasks = () => {
   return <div className="tasks">
     <h1>Tasks</h1>
 
-    <TaskForm onSubmit={onSaveTask} />
+    <TaskForm onSubmit={onCreateTask} />
     <br />
     <br />
     <TaskGrid tasks={tasks} onToggleComplete={onToggleTaskComplete} />

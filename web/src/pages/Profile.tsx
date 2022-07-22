@@ -11,11 +11,19 @@ const Profile = () => {
 
   const [tasks, setTasks] = useState<Task[]>([]);
 
+  /**
+   * NOTE 3 
+   * Local only.  How do we get this into the nav?
+   */
   const handleSubmit = async (values: UserFormState) => {
     const user = await UserService.setUser(values.name);
     setUser(user);
   }
 
+  /**
+   * NOTE 2.B 
+   * Have to prop drill this every time a prop grid is used
+   */
   const onToggleTaskComplete = async (id: number, completed: boolean) => {
     const index = tasks.findIndex(task => task.id === id);
     const ts = [...tasks];
