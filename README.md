@@ -14,11 +14,25 @@
 
 ## 2--create-context
 
-Next steps - hook up functionality
+Global state pros 
+- we can get totals / state into header 
+- more efficient with re-queries / re-renders
 
-## 3--immer/zustand
+Global state cons
+- Subset lists (user tasks) require a lot of additional work. General task methods cannot be reused.
+- if other users are adding tasks, we'll need to build in "refetch timeout" functionality
 
-Next steps - hook up functionality
+
+## 3--zustand
+Pros
+- easy to use 
+- good render cycles
+- not global, so we can use parallel query sets with same code
+
+Cons 
+- more queries
+- updating one query state leaves others stranded
+
 
 ## 4--react-query
 
