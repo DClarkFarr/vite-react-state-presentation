@@ -30,5 +30,11 @@ Cons
 
 
 ## 4--react-query
+Pros 
+- global state / reusable state / both simultaneously 
+- everything can be synced all the time 
+- best render cycles / optimistic queries / fewer queries 
 
-Next steps - do things
+Cons 
+- a little more complex to setup 
+- needs an understanding of the whole project's needs to architect successfully
