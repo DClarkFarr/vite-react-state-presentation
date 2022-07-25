@@ -4,13 +4,15 @@ import { User } from "../types/UserTypes";
 const useUserQuery = () => {
   const queryClient = useQueryClient();
 
+  const queryKey = ['user'];
+
   const {
     data: user,
     error: errorMessage,
     isLoading,
     refetch: refetchUser,
   } = useQuery(
-    ["user"],
+    queryKey,
     () => {
       return UserService.getUser();
     },
@@ -20,7 +22,11 @@ const useUserQuery = () => {
       retry: false,
       onSuccess: (queriedUser) => {
         /**
+         * NOTE 5
          * Trigger any task queries for this user to be re-fetched
+         * NOTE: queryClient is not re-render safe, so this works best 
+         *       when you are using the query you are invalidating a query
+         *       that you are using.
          */
         queryClient.invalidateQueries({
           predicate: (query) => {
@@ -34,6 +40,10 @@ const useUserQuery = () => {
     }
   );
 
+  /**
+   * NOTE 6
+   * - use onMutate for optimistic updates.  Return context values to reset state on error.
+   */
   const { isLoading: isUpdatingUser, mutateAsync: setUserMutation } =
     useMutation(
       ["set-user"],
@@ -46,18 +56,18 @@ const useUserQuery = () => {
             id: -666, // an ID we know we won't get back from the server
             name,
           };
-          queryClient.setQueryData<User | null>(["user"], optimisticUser);
+          queryClient.setQueryData<User | null>(queryKey, optimisticUser);
 
-          return { optimisticUser };
+          return { oldUser: user, optimisticUser };
         },
         onError: (error, variables, context) => {
           queryClient.setQueryData<User | null>(
-            ["user"],
-            context?.optimisticUser || null
+            queryKey,
+            context?.oldUser || null
           );
         },
         onSuccess: (data) => {
-          queryClient.setQueryData<User | null>(["user"], data);
+          queryClient.setQueryData<User | null>(queryKey, data);
         },
       }
     );

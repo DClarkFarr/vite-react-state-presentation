@@ -5,6 +5,10 @@ import useUserQuery from "../../hooks/useUserQuery";
 import CustomLink from "./NavLink";
 
 const MainLayout = ({ children = null }: { children?: ReactNode }) => {
+  /**
+   * NOTE 7
+   * Very easy to use in other places, and they're always in sync!
+   */
   const { user } = useUserQuery();
   const { tasks } = useTasksQuery();
 
