@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { TaskFormState } from "../components/Forms/TaskForm";
 import TaskService from "../services/taskService";
-import { Task, TaskListOptions } from "../types/TaskTypes";
+import { Task, TaskListOptions, TaskPostData } from "../types/TaskTypes";
 import { debounce } from 'lodash';
 
 const useTasksHook = (options: TaskListOptions = {}) => {
@@ -23,7 +23,7 @@ const useTasksHook = (options: TaskListOptions = {}) => {
     setIsCreating(false);
   }
 
-  const updateTask = async (id: number, data: Partial<{completed: boolean, title: string}>) => {
+  const updateTask = async (id: number, data: TaskPostData) => {
     const index = tasks.findIndex(task => task.id === id);
     
     setIsUpdating(true);
