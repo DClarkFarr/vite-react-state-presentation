@@ -1,42 +1,30 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import TaskForm, { TaskFormState } from "../components/Forms/TaskForm";
 import MainLayout from "../components/Layout/MainLayout";
 import TaskGrid from "../components/Task/TaskGrid";
-import TaskService from "../services/taskService";
-import { Task } from "../types/TaskTypes";
+import useTasksQuery from "../hooks/useTasksQuery";
 
 const Tasks = () => {
-  const [selectedTaskId, setSelectedTaskId] = useState<number | null>(null);
-  const [tasks, setTasks] = useState<Task[]>([]);
-
-  const onCreateTask = async (values: TaskFormState) => {
-    if(selectedTaskId) {
-      const task = await TaskService.update(selectedTaskId, values);
-      const index = tasks.findIndex(t => t.id === task.id);
-      const ts = [...tasks];
-      ts.splice(index, 1, task);
-      setTasks(ts);
-    }else{
-      const task = await TaskService.create(values);
-      setTasks([...tasks, task]);
-    }
-
-    setSelectedTaskId(null);
-  }
+  const [selectedTaskId] = useState<number | null>(null);
+  
+  const {
+    tasks,
+    isLoading,
+    updateTask,
+    createTask
+  } = useTasksQuery();
 
   const onToggleTaskComplete = async (id: number, completed: boolean) => {
-    const index = tasks.findIndex(task => task.id === id);
-    const ts = [...tasks];
-
-    ts.splice(index, 1, { ...ts[index], completed });
-    setTasks(ts);
-
-    TaskService.update(id, { completed });
+    updateTask(id, { completed });
   }
 
-  useEffect(() => {
-    TaskService.list().then(setTasks);
-  }, []);
+  const onCreateTask = async (values: TaskFormState) => {
+    if(selectedTaskId){
+      await updateTask(selectedTaskId, values);
+    }else{
+      await createTask(values);
+    }
+  }
 
   return (
     <MainLayout>
@@ -46,6 +34,7 @@ const Tasks = () => {
         <TaskForm onSubmit={onCreateTask} />
         <br />
         <br />
+        {isLoading ? <div>Loading...</div> : <div>{tasks.length} Tasked Loaded</div>}
         <TaskGrid tasks={tasks} onToggleComplete={onToggleTaskComplete} />
       </div>
     </MainLayout>

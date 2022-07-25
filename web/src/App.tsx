@@ -3,11 +3,16 @@ import { Routes, Route } from "react-router-dom";
 import Home from "./pages/Home";
 import Tasks from "./pages/Tasks";
 import Profile from "./pages/Profile";
-import MainLayout from "./components/Layout/MainLayout";
+
+import {
+  QueryClient,
+  QueryClientProvider,
+} from '@tanstack/react-query';
 
 function App() {
-
+  const queryClient = new QueryClient();
   return (
+    <QueryClientProvider client={queryClient}>
       <div className="app">
         <Routes>
             <Route path="tasks" element={<Tasks />} />
@@ -15,6 +20,7 @@ function App() {
             <Route path="/" element={<Home />} />
         </Routes>
       </div>
+    </QueryClientProvider>
   );
 }
 
