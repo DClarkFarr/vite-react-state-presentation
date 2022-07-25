@@ -17,9 +17,16 @@ Global state cons
 - Subset lists (user tasks) require a lot of additional work. General task methods cannot be reused.
 - if other users are adding tasks, we'll need to build in "refetch timeout" functionality
 
-## 3--immer/zustand
+## 3--zustand
+Pros
+- easy to use 
+- good render cycles
+- not global, so we can use parallel query sets with same code
 
-Next steps - hook up functionality
+Cons 
+- more queries
+- updating one query state leaves others stranded
+
 
 ## 4--react-query
 
