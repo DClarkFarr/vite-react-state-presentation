@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
 import { TaskFormState } from "../components/Forms/TaskForm";
 import TaskService from "../services/taskService";
-import { Task } from "../types/TaskTypes";
+import { Task, TasksListOptions } from "../types/TaskTypes";
 import { debounce } from 'lodash';
 
-const useTasksHook = (options: Partial<{completed: boolean, userId: number}> = {}) => {
+const useTasksHook = (options: TasksListOptions = {}) => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [hasLoaded, setHasLoaded] = useState<boolean>(false);
   const [isUpdating, setIsUpdating] = useState<boolean>(false);
