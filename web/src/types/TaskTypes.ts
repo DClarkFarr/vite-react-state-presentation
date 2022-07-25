@@ -1,6 +1,7 @@
 import { User } from './UserTypes'
 
-export type TasksListOptions = Partial<{completed: boolean, userId: number}>;
+export type TaskListOptions = Partial<{completed: boolean, userId: number}>;
+export type TaskPostData = Partial<{ title: string, completed: boolean }>;
 
 export type Task = {
   id: number;
@@ -9,5 +10,3 @@ export type Task = {
   user: User
 };
 
-export type TaskPostData = Partial<{ title: string, completed: boolean }>;
-export type TaskListOptions = Partial<{completed: boolean, userId: number}>;
