@@ -3,19 +3,19 @@ import { useEffect, useMemo } from 'react'
 import create from 'zustand'
 import { devtools, persist } from 'zustand/middleware'
 import TaskService from '../services/taskService'
-import { Task, TasksListOptions } from '../types/TaskTypes'
+import { Task, TaskListOptions, TaskPostData } from '../types/TaskTypes'
 
 type UseTasksState = {
   tasks: Task[]
   isLoading: boolean;
   setLoading: (isLoading: boolean) => void;
   createTask: (data: {title: string}) => Promise<Task>;
-  updateTask: (id: number, data: Partial<{ title: string, completed: boolean }>) => Promise<Task>;
+  updateTask: (id: number, data: TaskPostData) => Promise<Task>;
   getTasks: () => Promise<Task[]>;
   refreshTasks: () => Promise<Task[]>;
 }
 
-const getOptionKey = (options: TasksListOptions = {}) => {
+const getOptionKey = (options: TaskListOptions = {}) => {
   let completed = 'all';
   if(typeof options.completed === 'boolean'){
     completed = options.completed ? 'complete' : 'incomplete';
@@ -32,7 +32,7 @@ const getOptionKey = (options: TasksListOptions = {}) => {
  * Nice persist middleware!
  */
 
-const createTasksScore = (options: TasksListOptions = {}) => {
+const createTasksScore = (options: TaskListOptions = {}) => {
   console.log('creating store with key', getOptionKey(options));
   return create<UseTasksState>()(
     devtools(
@@ -41,7 +41,7 @@ const createTasksScore = (options: TasksListOptions = {}) => {
           tasks: [],
           isLoading: false,
           setLoading: (isLoading: boolean) => set(state => ({ ...state, isLoading })),
-          updateTask: async (id: number, data: Partial<{ title: string, completed: boolean }>) => {
+          updateTask: async (id: number, data: TaskPostData) => {
             get().setLoading(true);
             const task = await TaskService.update(id, data);
   
