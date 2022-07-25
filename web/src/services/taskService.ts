@@ -1,8 +1,8 @@
-import { Task, TasksListOptions } from "../types/TaskTypes";
+import { Task, TaskListOptions } from "../types/TaskTypes";
 import axiosClient from "./axiosClient";
 
 class TaskService {
-  static async list(options: TasksListOptions) {
+  static async list(options: TaskListOptions) {
     return axiosClient
       .get<{ tasks: Task[] }>("/tasks", { params: options })
       .then(({ data: { tasks } }) => tasks);
