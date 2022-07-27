@@ -80,7 +80,15 @@ const useTasksHook = (options: TaskListOptions = {}) => {
      * Try to avoid repeated queries, right?
      */
     if(!isLoading && !hasLoaded) {
-      refreshTasks();
+      /**
+       * STEP 1.A
+       */
+      getTasks();
+
+      /**
+       * STEP 2.A
+       */
+      // refreshTasks();
     }
   }, []);
 
@@ -94,12 +102,12 @@ const useTasksHook = (options: TaskListOptions = {}) => {
      */
 
     /**
-     * STEP 1
+     * STEP 1.B
      */
     getTasks();
 
     /**
-     * STEP 2
+     * STEP 2.B
      */
     // refreshTasks();
 
