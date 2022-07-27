@@ -38,6 +38,7 @@ Pros
 Cons 
 - More XHR queries
 - Subset lists can become stranded and out of date with each other.
+- Need page changes to update (as is)
 
 
 ## 4--react-query
