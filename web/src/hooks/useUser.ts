@@ -36,7 +36,7 @@ const useUserStore = create<UseUserState>()(
 );
 
 
-const useUser =() => {
+const useUser = () => {
   const store = useUserStore();
 
   useEffect(() => {
