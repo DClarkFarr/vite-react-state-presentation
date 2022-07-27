@@ -11,6 +11,7 @@ import { User } from "../types/UserTypes";
 const Profile = () => {
   const [user, setUser] = useState<User | null>(null);
 
+  const [isLoading, setIsLoading] = useState(true);
   const [tasks, setTasks] = useState<Task[]>([]);
 
   const { count } = useRenderCounter('profile');
@@ -44,7 +45,8 @@ const Profile = () => {
 
   useEffect(() => {
     if(user){
-      TaskService.list({ userId: user?.id }).then(setTasks);
+      setIsLoading(true);
+      TaskService.list({ userId: user?.id }).then(setTasks).finally(() => setIsLoading(false));
     }
   }, [user])
 
@@ -58,6 +60,7 @@ const Profile = () => {
         
         <UserForm onSubmit={handleSubmit} user={user || undefined} key={user?.name} />
         <br /><br />
+        {isLoading ? <div>Loading...</div> : <div>{tasks.length} Tasks</div>}
         {user && <h3>My Tasks</h3>}
         <TaskGrid tasks={tasks} onToggleComplete={onToggleTaskComplete} />
       </div>

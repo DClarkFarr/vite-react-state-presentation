@@ -28,7 +28,7 @@ app.use(
       //purge_interval: 700,
     }),
     secret: "There is no power, but what you have in your head",
-    resave: false,
+    resave: true,
     saveUninitialized: false,
     cookie: { secure: false, maxAge: 360000000 },
   })
