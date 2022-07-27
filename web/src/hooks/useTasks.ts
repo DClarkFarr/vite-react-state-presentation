@@ -32,7 +32,7 @@ const getOptionKey = (options: TaskListOptions = {}) => {
  * Nice persist middleware!
  */
 
-const createTasksScore = (options: TaskListOptions = {}) => {
+const createTasksStore = (options: TaskListOptions = {}) => {
   console.log('creating store with key', getOptionKey(options));
   return create<UseTasksState>()(
     devtools(
@@ -95,17 +95,17 @@ const createTasksScore = (options: TaskListOptions = {}) => {
 type StoreContexts = Record<string, any>;
 const contexts: StoreContexts = {};
 
-const getTaskStore = (options: TasksListOptions = {}) => {
+const getTaskStore = (options: TaskListOptions = {}) => {
   const key = getOptionKey(options);
   if(!contexts[key]){
-    contexts[key] = createTasksScore(options);
+    contexts[key] = createTasksStore(options);
   }
 
   return contexts[key];
 }
 
 
-const useTasks = (options: TasksListOptions = {}) => {
+const useTasks = (options: TaskListOptions = {}) => {
   const store = getTaskStore(options)();
 
   if(!store){
