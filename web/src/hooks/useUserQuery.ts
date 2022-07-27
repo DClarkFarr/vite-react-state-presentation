@@ -24,9 +24,11 @@ const useUserQuery = () => {
         /**
          * NOTE 5
          * Trigger any task queries for this user to be re-fetched
-         * NOTE: queryClient is not re-render safe, so this works best 
-         *       when you are using the query you are invalidating a query
-         *       that you are using.
+         * 
+         * IMPORTANT 
+         * QueryClient is not re-render safe, so this works best 
+         * when you are using the query you are invalidating a query
+         * that you are using.
          */
         queryClient.invalidateQueries({
           predicate: (query) => {
@@ -66,8 +68,8 @@ const useUserQuery = () => {
             context?.oldUser || null
           );
         },
-        onSuccess: (data) => {
-          queryClient.setQueryData<User | null>(queryKey, data);
+        onSuccess: (user) => {
+          queryClient.setQueryData<User | null>(queryKey, user);
         },
       }
     );
