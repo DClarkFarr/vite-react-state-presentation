@@ -92,7 +92,7 @@ const createTasksStore = (options: TaskListOptions = {}) => {
  * NOTE 3
  * Annoying work-around to be able to maintain parallel stores
  */
-type StoreContexts = Record<string, any>;
+type StoreContexts = Record<string, ReturnType<typeof createTasksStore>>;
 const contexts: StoreContexts = {};
 
 const getTaskStore = (options: TaskListOptions = {}) => {
